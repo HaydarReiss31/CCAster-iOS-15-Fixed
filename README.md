@@ -2,7 +2,7 @@
 
 # CCAster
 
-CCAster is an iOS 18-inspired, editable Control Center experience for rootless iOS 16.
+CCAster is an iOS 18-inspired, editable Control Center experience for rootless iOS 15 through 17. (11 through 14 compatibility not known)
 
 The project currently focuses on SpringBoard-side Control Center behavior:
 
@@ -22,16 +22,19 @@ CCAster is a rootless Theos project.
 env CLANG_MODULE_CACHE_PATH=/tmp/clang-module-cache SWIFT_MODULE_CACHE_PATH=/tmp/swift-module-cache make clean package FINALPACKAGE=1
 ```
 
-The package is configured for iOS 16:
+The package is configured for iOS 11 through 17 (though support will vary):
 
 - package id: `com.futur3sn0w.ccaster`
-- firmware: `>= 16.0, << 17.0`
+- firmware: `>= 11.0, << 17.0`
 - injection target: SpringBoard
 - dependencies: ElleKit and PreferenceLoader
 
 ## Project Layout
 
-- `Tweak.xm` contains the SpringBoard hooks, layout engine, edit mode, add sheet, and module presentation logic.
+This is a horribly AI coded sloppy mess and I am only here to add support for iOS 15 through 17. Support for iOS 11 through 14 is not known yet, therefore you are encouraged to test.
+What's so hard about adding support for iOS 15 anyway? I managed to do it just by changing the target firmware.
+Tested on iPhone X running iOS 16.7.15, iPhone 7 Plus running iOS 15.8.3 as well as iPhone 6s running iOS 15.8.8
+- `Tweak.xm` contains 13 thousand fucking lines of AI coded SpringBoard hooks, layout engine, edit mode, add sheet, and module presentation logic that could either crash or horribly lag out devices. 
 - `prefs/` contains the PreferenceLoader bundle.
 - `scripts/` contains local device/testing helpers.
 
