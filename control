@@ -4,8 +4,8 @@ SileoDepiction: https://futur3sn0w.github.io/repo/depictions/com.futur3sn0w.ccas
 Name: CCAster
 Version: 0.2.2
 Architecture: iphoneos-arm64
-Description: An iOS 18-inspired, editable Control Center experience for iOS 16.
+Description: AI slop.
 Maintainer: futur3sn0w
 Author: futur3sn0w
 Section: Tweaks
-Depends: firmware (>= 16.0), firmware (<< 17.0), ellekit, preferenceloader
+Depends: firmware (>= 11.0), firmware (<< 18.0), ellekit, preferenceloader
