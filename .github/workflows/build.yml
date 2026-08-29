@@ -1,0 +1,30 @@
+name: Build CCAster
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Theos
+        run: |
+          git clone --recursive https://github.com/theos/theos.git ~/theos
+          echo "THEOS=$HOME/theos" >> $GITHUB_ENV
+
+      - name: Get iOS 16.5 SDK
+        run: |
+          git clone -n --depth 1 --filter=blob:none --sparse https://github.com/theos/sdks.git /tmp/sdks
+          cd /tmp/sdks && git sparse-checkout set iPhoneOS16.5.sdk.tar.xz
+          git checkout main
+          tar -xf iPhoneOS16.5.sdk.tar.xz -C $HOME/theos/sdks
+
+      - name: Build package
+        run: |
+          export THEOS=$HOME/theos
+          env CLANG_MODULE_CACHE_PATH=/tmp/clang-module-cache SWIFT_MODULE_CACHE_PATH=/tmp/swift-module-cache make clean package FINALPACKAGE=1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ccaster-deb
+          path: packages/*.deb
