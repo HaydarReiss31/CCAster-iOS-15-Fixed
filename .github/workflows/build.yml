@@ -16,7 +16,7 @@ jobs:
         run: |
           git clone -n --depth 1 --filter=blob:none --sparse https://github.com/theos/sdks.git /tmp/sdks
           cd /tmp/sdks && git sparse-checkout set iPhoneOS16.5.sdk.tar.xz
-          git checkout main
+          git checkout master
           tar -xf iPhoneOS16.5.sdk.tar.xz -C $HOME/theos/sdks
 
       - name: Build package
