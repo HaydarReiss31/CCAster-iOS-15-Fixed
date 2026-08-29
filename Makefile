@@ -6,11 +6,10 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = CCAster
 
-CCAster_FILES = Tweak.xm
+CCAster_FILES = Tweak.xm compat.m
 CCAster_FRAMEWORKS = UIKit CoreFoundation CFNetwork QuartzCore CoreImage
 CCAster_PRIVATE_FRAMEWORKS = ControlCenterServices SpringBoardUIServices
 CCAster_CFLAGS = -fobjc-arc
-CCAster_LDFLAGS = -Wl,-force_load,$(THEOS)/toolchain/linux/iphone/lib/libclang_rt.ios.a
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
