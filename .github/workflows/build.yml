@@ -19,6 +19,9 @@ jobs:
           curl -L -o iPhoneOS16.5.sdk.tar.xz https://github.com/theos/sdks/releases/latest/download/iPhoneOS16.5.sdk.tar.xz
           tar -xf iPhoneOS16.5.sdk.tar.xz -C $HOME/theos/sdks
 
+      - name: Find libclang_rt.ios
+        run: find $HOME/theos/toolchain -iname "*libclang_rt.ios*" || echo "NOT FOUND"
+
       - name: Build package
         run: |
           export THEOS=$HOME/theos
