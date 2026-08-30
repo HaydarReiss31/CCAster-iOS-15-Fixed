@@ -51,4 +51,4 @@ The split is intentional:
 
 The first COSMIC Kit split moved the extra connectivity module bundles out of the CCAster package while preserving their existing bundle identifiers. This keeps current CCAster runtime handling and saved layouts stable while giving future modules a cleaner home.
 
-Future work can make the CCAster add sheet COSMIC-aware, including support for module families, duplicate-capable modules, and dynamically generated module instances with unique Apple-facing identifiers.
+Future work can make the CCAster add sheet COSMIC-aware, including support for module families, duplicate-capable modules, and dynamically generated module instances with unique Apple-facing identifiers
