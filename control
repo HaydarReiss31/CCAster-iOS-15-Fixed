@@ -2,7 +2,7 @@ Package: com.futur3sn0w.ccaster
 Icon: https://futur3sn0w.github.io/repo/icons/com.futur3sn0w.ccaster.png
 SileoDepiction: https://futur3sn0w.github.io/repo/depictions/com.futur3sn0w.ccaster.json
 Name: CCAster
-Version: 0.2.4
+Version: 0.2.5
 Architecture: iphoneos-arm64
 Description: AI slop.
 Maintainer: futur3sn0w
