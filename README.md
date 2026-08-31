@@ -2,53 +2,74 @@
 
 # CCAster
 
-CCAster is an iOS 18-inspired, editable Control Center experience for rootless iOS 15 through 17. (11 through 14 compatibility not known)
+CCAster is an iOS 18-inspired, editable Control Center experience for jailbroken iOS 15 through 17 devices.
 
-The project currently focuses on SpringBoard-side Control Center behavior:
+The project focuses on bringing a modern, paged and customizable Control Center experience to older iOS versions.
 
-- editable module layout
-- CCAster's custom add-control sheet
-- paged module placement
-- resize chrome and custom module footprints
-- iOS 16 compatibility around `ControlCenterUIKit` and `ControlCenterServices`
+## ✨ Features
 
-This source repository is intentionally separate from the public package feed. Pushing here does not publish a package to the live APT repo or GitHub Pages.
+- Editable module layout
+- Paged Control Center
+- Custom add-control sheet
+- Resizable modules
+- Custom module footprints
+- iOS 16 compatibility improvements for `ControlCenterUIKit` and `ControlCenterServices`
+- Rootless jailbreak support
 
-## Building
+## 📱 Compatibility
+
+| iOS Version | Status |
+|-------------|--------|
+| iOS 15 | ✅ Tested |
+| iOS 16 | ✅ Tested |
+| iOS 17 | ⚠️ Testing needed |
+| iOS 11–14 | ❓ Unknown |
+
+### Tested Devices
+
+- iPhone 6s — iOS 15.8.8
+- iPhone 7 Plus — iOS 15.8.3
+- iPhone X — iOS 16.7.15
+
+Support for iOS 11–14 is currently unknown. If you test CCAster on these versions, please report your results.
+
+## 🔨 Building
 
 CCAster is a rootless Theos project.
 
 ```sh
-env CLANG_MODULE_CACHE_PATH=/tmp/clang-module-cache SWIFT_MODULE_CACHE_PATH=/tmp/swift-module-cache make clean package FINALPACKAGE=1
-```
-
-The package is configured for iOS 11 through 17 (though support will vary):
-
-- package id: `com.futur3sn0w.ccaster`
-- firmware: `>= 11.0, << 17.0`
-- injection target: SpringBoard
-- dependencies: ElleKit and PreferenceLoader
-
-## Project Layout
-
-This is a horribly AI coded sloppy mess and I am only here to add support for iOS 15 through 17. Support for iOS 11 through 14 is not known yet, therefore you are encouraged to test.
-What's so hard about adding support for iOS 15 anyway? I managed to do it just by changing the target firmware.
-Tested on iPhone X running iOS 16.7.15, iPhone 7 Plus running iOS 15.8.3 as well as iPhone 6s running iOS 15.8.8
-- `Tweak.xm` contains 13 thousand fucking lines of AI coded SpringBoard hooks, layout engine, edit mode, add sheet, and module presentation logic that could either crash or horribly lag out devices. 
-- `prefs/` contains the PreferenceLoader bundle.
-- `scripts/` contains local device/testing helpers.
-
-Generated build output, package artifacts, screenshots, and diagnostics are intentionally ignored by git.
-
-## COSMIC Kit
-
-CCAster can work with [COSMIC Kit](https://github.com/MoarTweaks/COSMICKit), a companion package for optional Control Center modules.
-
-The split is intentional:
-
-- CCAster owns the Control Center experience: layout, editing, add sheet, paging, resize behavior, and runtime integration.
-- COSMIC Kit owns optional module bundles that can be installed independently from the CCAster core.
-
-The first COSMIC Kit split moved the extra connectivity module bundles out of the CCAster package while preserving their existing bundle identifiers. This keeps current CCAster runtime handling and saved layouts stable while giving future modules a cleaner home.
-
-Future work can make the CCAster add sheet COSMIC-aware, including support for module families, duplicate-capable modules, and dynamically generated module instances with unique Apple-facing identifiers.
+env CLANG_MODULE_CACHE_PATH=/tmp/clang-module-cache \
+SWIFT_MODULE_CACHE_PATH=/tmp/swift-module-cache \
+make clean package FINALPACKAGE=1
+Package Information
+Package ID: com.futur3sn0w.ccaster
+Firmware: >= 11.0, << 17.0
+Injection Target: SpringBoard
+Dependencies: ElleKit, PreferenceLoader
+📁 Project Structure
+Tweak.xm — SpringBoard hooks, Control Center logic, layout engine, edit mode, add sheet and module presentation
+prefs/ — PreferenceLoader bundle
+scripts/ — Development and testing helpers
+🧩 COSMIC Kit
+CCAster can work with COSMIC Kit⁠�, a companion package providing optional Control Center modules.
+The projects have separate responsibilities:
+CCAster — Control Center UI, layout, editing, paging, resizing and runtime integration
+COSMIC Kit — Optional Control Center module bundles
+This separation allows additional modules to be developed and installed independently from the CCAster core.
+⚠️ Status
+CCAster is still under active development.
+Because the tweak relies on Apple's private Control Center frameworks, behavior may vary between iOS versions and devices.
+If you encounter a problem, please include:
+Device model
+iOS version
+Jailbreak used
+Relevant logs or crash reports
+Steps to reproduce the issue
+🤝 Contributing
+Compatibility testing, bug reports and pull requests are welcome.
+If you test CCAster on an unsupported iOS version or device, please share your results.
+⭐ Support
+If CCAster is useful to you, consider giving the repository a star.
+It helps other jailbreak users discover the project.
+🤖 Development Note
+CCAster was developed entirely using AI assistance.
