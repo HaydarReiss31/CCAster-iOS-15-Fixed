@@ -7,12 +7,9 @@ CCAster is an iOS 18-inspired, editable Control Center experience for jailbroken
 This project is a compatibility-focused continuation of CCAster for iOS 15, bringing the modern paged and customizable Control Center experience to older devices.
 
 <p align="center">
-  <img src="assets/cc-overview.png" width="220" />
-  <img src="assets/edit-mode.png" width="220" />
-</p>
-
-<p align="center">
-  <img src="assets/demo.gif" width="180" />
+  <img src="assets/cc-overview.png" width="105" />
+  <img src="assets/edit-mode.png" width="105" />
+  <img src="assets/demo.gif" width="105" />
 </p>
 
 ## ✨ Features
