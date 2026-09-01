@@ -9,7 +9,10 @@ This project is a compatibility-focused continuation of CCAster for iOS 15, brin
 <p align="center">
   <img src="assets/cc-overview.png" width="220" />
   <img src="assets/edit-mode.png" width="220" />
-  <img src="assets/demo.gif" width="220" />
+</p>
+
+<p align="center">
+  <img src="assets/demo.gif" width="180" />
 </p>
 
 ## ✨ Features
