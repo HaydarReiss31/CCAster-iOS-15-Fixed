@@ -85,7 +85,7 @@ This separation allows additional modules to be developed independently from the
 
 - **[MoarTweaks](https://github.com/MoarTweaks/CCAster)** (futur3sn0w) — original creator of CCAster.
 - **[notsoseagatey](https://github.com/notsoseagatey)** — ported CCAster to iOS 15.
-- **[Tuna](https://github.com/HaydarReiss31)** — performance and stability fixes for this build (see Changelog below).
+- **[HaydarReiss31](https://github.com/HaydarReiss31)** — performance and stability fixes for this build (see Changelog below).
 
 ## 📝 Changelog
 
