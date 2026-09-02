@@ -14,6 +14,11 @@ static NSString *const kCCAReloadNotification = @"com.futur3sn0w.ccaster/ReloadP
 static BOOL gEnabled = YES;
 static BOOL gQuickAccessButtonsEnabled = YES;
 static BOOL gPagingEnabled = YES;
+// gPagingEnabled itself becomes the *effective* runtime value, recomputed
+// on every paging layout pass (see normalizePagedLayoutForOverlay:) as
+// (preference && !landscape). The user's actual preference is tracked
+// separately here so recomputing doesn't lose it.
+static BOOL gPagingPreferenceEnabled = YES;
 static BOOL gBlankSpaceGestureEnabled = YES;
 static BOOL gAddButtonEnabled = YES;
 static BOOL gPowerButtonEnabled = YES;
@@ -390,6 +395,7 @@ static void CCAApplyCompactGridSpacingToLayoutOptions(id layoutOptions) {
 static NSArray<UIViewController *> *CCACollectModuleControllers(UIViewController *root);
 static CGRect CCAVisibleModuleFrame(UIViewController *module, UIViewController *overlay);
 static UIViewController *CCAConnectivityChild(UIViewController *controller, NSString *className);
+static BOOL CCAIsLandscapeOrientation(UIView *view);
 static void CCARefreshSettledCompactMediaSnapshot(UIViewController *overlay);
 static void CCABeginConnectivityOpeningTransition(UIViewController *controller);
 static void CCAStartConnectivityOpeningReveal(UIPresentationController *presentationController);
@@ -1296,7 +1302,8 @@ static void CCALoadPrefs(void) {
     CFPreferencesAppSynchronize(kCCAPrefsDomain);
     gEnabled = CCAPreferenceBool(@"Enabled", YES);
     gQuickAccessButtonsEnabled = CCAPreferenceBool(@"QuickAccessButtonsEnabled", YES);
-    gPagingEnabled = CCAPreferenceBool(@"PagingEnabled", YES);
+    gPagingPreferenceEnabled = CCAPreferenceBool(@"PagingEnabled", YES);
+    gPagingEnabled = gPagingPreferenceEnabled;
     gBlankSpaceGestureEnabled = CCAPreferenceBool(@"BlankSpaceGestureEnabled", YES);
     gAddButtonEnabled = CCAPreferenceBool(@"AddButtonEnabled", YES);
     gPowerButtonEnabled = CCAPreferenceBool(@"PowerButtonEnabled", YES);
@@ -4195,6 +4202,13 @@ static NSUInteger CCADerivedVisiblePageForOverlay(UIViewController *overlay) {
 
 - (void)normalizePagedLayoutForOverlay:(UIViewController *)overlay {
     if (!overlay) return;
+    // The whole grid/paging system was built assuming portrait dimensions —
+    // there's no landscape-aware layout path. Rather than show a garbled
+    // mix of portrait-computed frames on a landscape screen, fall back to
+    // paging-disabled (a real, already-supported, user-toggleable mode)
+    // whenever the overlay is currently landscape. Recomputed here since
+    // this function already runs on every meaningful paging-layout trigger.
+    gPagingEnabled = gPagingPreferenceEnabled && !CCAIsLandscapeOrientation(overlay.view);
     [self syncOwnedDuplicateModulesForOverlay:overlay];
     NSArray<UIViewController *> *modules = CCACollectModuleControllers(overlay);
     if (!modules.count) return;
@@ -6089,7 +6103,7 @@ static NSUInteger CCADerivedVisiblePageForOverlay(UIViewController *overlay) {
     return NO;
 }
 
-- (void)addTapped:(__unused UIButton *)sender { if (!gEnabled || gCCAExpandedModuleOpen) return; CCAHaptic(); [self setEditing:!gEditModeActive]; }
+- (void)addTapped:(__unused UIButton *)sender { if (!gEnabled || gCCAExpandedModuleOpen || (!gEditModeActive && CCAIsLandscapeOrientation(sender))) return; CCAHaptic(); [self setEditing:!gEditModeActive]; }
 - (void)expandConnectivityFromMiniCluster:(UIButton *)sender {
     if (!gEnabled || gEditModeActive || gCCAExpandedModuleOpen) return;
     UIViewController *overlay = gOverlayControllers.allObjects.firstObject;
@@ -6202,7 +6216,7 @@ static NSUInteger CCADerivedVisiblePageForOverlay(UIViewController *overlay) {
 }
 - (void)ignoreTap:(__unused UIButton *)sender {}
 - (void)blankHeld:(UILongPressGestureRecognizer *)gesture {
-    if (gesture.state == UIGestureRecognizerStateBegan && !gEditModeActive && !gCCAExpandedModuleOpen) {
+    if (gesture.state == UIGestureRecognizerStateBegan && !gEditModeActive && !gCCAExpandedModuleOpen && !CCAIsLandscapeOrientation(gesture.view)) {
         CCAHaptic();
         [self setEditing:YES];
     }
@@ -10087,6 +10101,11 @@ static void CCAAnimateDiscreteMediaLayout(UIView *view) {
 // MRUNowPlayingControlsView -> _headerView (MRUNowPlayingHeaderView with
 // _artworkView, native _routingButton, _labelView) + _transportControlsView
 // (leftButton/middleButton/rightButton). ---
+
+static BOOL CCAIsLandscapeOrientation(UIView *view) {
+    CGSize size = view.bounds.size;
+    return size.width > size.height;
+}
 
 static UIView *CCAIvarView(id object, const char *name) {
     if (!object) return nil;
