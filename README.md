@@ -81,6 +81,20 @@ The projects have separate responsibilities:
 
 This separation allows additional modules to be developed independently from the CCAster core.
 
+## ❓ FAQ
+
+**Q: Does this work on iOS 16 or iOS 17?**
+A: No, this fork is only tested for iOS 15. For iOS 16 and later, please use the [original CCAster repository](https://github.com/MoarTweaks/CCAster).
+
+**Q: How do I enter edit mode?**
+A: Long-press (hold) on an empty area of the Control Center. This will activate edit mode where you can rearrange, resize, and customize modules.
+
+**Q: Can I use this with COSMIC Kit?**
+A: Yes! CCAster works great with COSMIC Kit for additional Control Center modules.
+
+**Q: What jailbreak should I use?**
+A: This is a rootless Theos project, so it works with rootless jailbreaks like Palera1n and Dopamine on iOS 15.
+
 ## 🙌 Credits
 
 - **[MoarTweaks](https://github.com/MoarTweaks/CCAster)** (futur3sn0w) — original creator of CCAster.
