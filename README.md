@@ -116,6 +116,7 @@ See the Releases page for full details on each version.
 ## ⚠️ Known Issues
 
 - The connectivity card can briefly flash blank or show visual artifacts when expanding/collapsing. Cosmetic only — self-resolves within a second or two, does not crash.
+- Control Center layout may appear distorted when the device is rotated to landscape orientation.
 
 ## ⚠️ Status
 
