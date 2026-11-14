@@ -373,6 +373,9 @@ static BOOL CCAInteractivePagingGeometryActive(void) {
         fabs(gCCAPagerInteractiveTranslation) > 0.01;
 }
 
+static CGFloat gCCANativeGridCell = 0.0;
+static CGFloat gCCANativeGridGap = 0.0;
+
 static void CCAApplyCompactGridSpacingToLayoutOptions(id layoutOptions) {
     if (!gEnabled || !layoutOptions) return;
 #pragma clang diagnostic push
@@ -389,6 +392,8 @@ static void CCAApplyCompactGridSpacingToLayoutOptions(id layoutOptions) {
         fabs(nativeCell - kCCAGridCellSize) < 0.5 &&
         fabs(nativeGap - kCCAGridGap) < 0.5;
     if (!alreadyCompact) {
+        if (nativeCell > 1.0) gCCANativeGridCell = nativeCell;
+        if (nativeGap > 1.0) gCCANativeGridGap = nativeGap;
         if (nativeCell > 1.0) kCCAGridCellSize = round(nativeCell * kCCAGridCellScale);
         if (nativeGap > 1.0) kCCAGridGap = round(nativeGap * kCCAGridGapScale);
     }
@@ -10032,6 +10037,34 @@ static void CCASyncLandscapeState(UIViewController *overlay) {
 
 %end
 
+// Landscape'te Apple'in kendi hucre/bosluk boyutlari, portrait'te CCAster'in compact boyutlari.
+static void CCASyncGridSpacingForCollectionView(UIView *collectionView) {
+    if (!gEnabled || !collectionView) return;
+    id layoutOptions = nil;
+    @try { layoutOptions = [(id)collectionView valueForKey:@"layoutOptions"]; } @catch (__unused NSException *exception) {}
+    if (!layoutOptions) return;
+    Ivar spacingIvar = class_getInstanceVariable([layoutOptions class], "_itemSpacing");
+    Ivar edgeIvar = class_getInstanceVariable([layoutOptions class], "_itemEdgeSize");
+    if (!spacingIvar || !edgeIvar) return;
+    uint8_t *bytes = (uint8_t *)(__bridge void *)layoutOptions;
+    CGFloat *gapPtr = (CGFloat *)(bytes + ivar_getOffset(spacingIvar));
+    CGFloat *cellPtr = (CGFloat *)(bytes + ivar_getOffset(edgeIvar));
+    BOOL landscape = CCAIsLandscapeOrientation(collectionView);
+    CGFloat wantCell, wantGap;
+    if (landscape) {
+        if (gCCANativeGridCell <= 1.0 || gCCANativeGridGap <= 1.0) return;
+        wantCell = gCCANativeGridCell;
+        wantGap = gCCANativeGridGap;
+    } else {
+        wantCell = kCCAGridCellSize;
+        wantGap = kCCAGridGap;
+    }
+    if (fabs(*cellPtr - wantCell) < 0.01 && fabs(*gapPtr - wantGap) < 0.01) return;
+    *cellPtr = wantCell;
+    *gapPtr = wantGap;
+    [collectionView setNeedsLayout];
+}
+
 %hook CCUIModuleCollectionView
 
 - (instancetype)initWithFrame:(CGRect)frame layoutOptions:(id)layoutOptions {
@@ -10042,6 +10075,7 @@ static void CCASyncLandscapeState(UIViewController *overlay) {
 }
 
 - (void)layoutSubviews {
+    CCASyncGridSpacingForCollectionView((UIView *)(id)self);
     %orig;
     if (!gEnabled || CCAIsLandscapeOrientation((UIView *)(id)self)) return;
     UIScrollView *scrollView = (UIScrollView *)(id)self;
